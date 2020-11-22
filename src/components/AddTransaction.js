@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
-
+import React, { useState, useContext } from 'react';
+import { GlobalContext } from '../context/GlobalState';
+import { v4 as uuidv4 } from 'uuid';
 const AddTransaction = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
+  const { dispatch } = useContext(GlobalContext);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const id = uuidv4();
+    dispatch({
+      type: 'ADD_TRANSACTION',
+      payload: {
+        id,
+        amount: +amount,
+        text: text.charAt(0).toUpperCase() + text.slice(1),
+      },
+    });
+  };
   return (
     <>
       <h3>Add new transaction</h3>
-      <form>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <div className='form-control'>
           <label htmlFor='text'>Text</label>
           <input
